@@ -10,6 +10,7 @@ call vundle#begin()
 " " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 "
+Plugin 'altercation/vim-colors-solarized'
 " " The following are examples of different formats supported.
 " " Keep Plugin commands between vundle#begin/end.
 " " plugin on GitHub repo
@@ -74,7 +75,20 @@ let Tlist_Exit_OnlyWindow=1
 let Tlist_Use_Right_Window=1
 
 
+""altercation/vim-colors-solarized
+syntax enable
+set background=dark
+colorscheme solarized
 
+
+
+"编码
+"
+set fencs = utf-8,ucs-bom,gbk
+set termencoding=utf-8
+
+"字体"
+set guifont=Courier New:h10:cANSI
 
 "自定义快捷键
 map <F10> <Esc> :set nu!<CR>
@@ -134,7 +148,8 @@ if &filetype == 'sh'
 	call append(line(".")+2, "\#Mail: shiyan233@hotmail.com")
 	call append(line(".")+3, "\#Created Time:".strftime("%c") )
 	call append(line(".")+4, "\##############################################################")
-	call append(line(".")+5, "")
+	call append(line(".")+5, "\#!bin/bash")
+	call append(line(".")+6, "")
 else 
 	call setline(1, "/*#############################################################")
 	call append(line("."), "> FileName: ".expand("%") )
