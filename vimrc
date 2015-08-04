@@ -9,8 +9,10 @@ call vundle#begin()
 "
 " " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-"
+Plugin 'vim-multiple-cursors'
+Plugin 'Lokaltog/vim-powerline'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'flazz/vim-colorschemes'
 " " The following are examples of different formats supported.
 " " Keep Plugin commands between vundle#begin/end.
 " " plugin on GitHub repo
@@ -29,6 +31,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'taglist.vim'
 Plugin 'AutoComplPop'
 Plugin 'OmniCppComplete'
+Plugin 'c.vim'
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -67,7 +70,7 @@ let OmniCpp_DisplayMode=1
 
 "taglist Setting
 "
-"
+filetype plugin on
 let Tlist_Auto_Open=1
 let Tlist_Ctags_Cmd = '/home/shiyan/ctags/bin/ctags'
 let Tlist_Show_One_File=1
@@ -77,9 +80,9 @@ let Tlist_Use_Right_Window=1
 
 ""altercation/vim-colors-solarized
 syntax enable
-set background=dark
-colorscheme solarized
-
+""set background=dark
+""colorscheme solarized
+colorscheme darkblue2
 
 
 "编码
@@ -88,8 +91,9 @@ set fencs = utf-8,ucs-bom,gbk
 set termencoding=utf-8
 
 "字体"
-set guifont=Courier New:h10:cANSI
-
+""if has('gui')
+set guifont=Courier\ New\ 15 \cANSI 
+""endif
 "自定义快捷键
 map <F10> <Esc> :set nu!<CR>
 map <F12> <Esc> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q<CR>
@@ -103,17 +107,32 @@ filetype on
 filetype indent on
 set showmatch
 set confirm
-
-
+set autoindent
+set smartindent
+set laststatus=2
+set lines=35 columns=118
 
 "括号
 "
+
 inoremap ( ()<ESC>i
+inoremap ) <C-R>=ClosePair(')')<CR>
 inoremap [ []<ESC>i
-inoremap { {}<ESC>i
+inoremap ] <C-R>=ClosePair(']')<CR>
+inoremap { {<CR>}<ESC>O
+inoremap } <C-R>=ClosePair('}')<CR>
 inoremap < <><ESC>i
 inoremap " ""<ESC>i
 inoremap ' ''<ESC>i
+
+function! ClosePair(char)
+	if getline('.')[col('.') - 1] == a:char
+		return "\<Right>"
+	else
+		return a:char
+	endif
+endfunction
+
 "设置tab为4
 set tabstop=4
 set shiftwidth=4
@@ -121,7 +140,7 @@ set softtabstop=4
 
 "配色
 hi Pmenu cterm=NONE ctermbg=darkblue ctermfg=white guifg=white guibg=darkblue
-hi PmenuSel ctermbg=green ctermfg=white
+hi PmenuSel ctermbg=white ctermfg=white
 set cursorline
 hi cursorline cterm=underline
 ""ctermfg=white ctermbg=darkred guibg=darkred guifg=white
@@ -139,7 +158,7 @@ if version >= 603
 	set helplang=cn
 	set encoding=utf-8
 endif
-autocmd BufNewFile *.cpp,*.c,*.h,*.sh exec ":call SetTitle()"
+autocmd BufNewFile *.sh exec ":call SetTitle()"
 func SetTitle()
 if &filetype == 'sh'
 	call setline(1, "\##############################################################")
@@ -150,27 +169,7 @@ if &filetype == 'sh'
 	call append(line(".")+4, "\##############################################################")
 	call append(line(".")+5, "\#!bin/bash")
 	call append(line(".")+6, "")
-else 
-	call setline(1, "/*#############################################################")
-	call append(line("."), "> FileName: ".expand("%") )
-	call append(line(".")+1, "> Author: shiyan")
-	call append(line(".")+2, "> Mail: shiyan233@hotmail.com")
-	call append(line(".")+3, "> Created Time:".strftime("%c") )
-	call append(line(".")+4, "############################################################*/")
-	call append(line(".")+5, "")
-endif
-if &filetype == 'cpp'
-	call append(line(".")+6, "#include <iostream>")
-	call append(line(".")+7, "#include <stdio.h>")
-	call append(line(".")+8, "using namespace std;")
-	call append(line(".")+9, "")
-endif
-if &filetype == 'c'
-	call append(line(".")+6, "#include <stdio.h>")
-	call append(line(".")+7, "#include <stdlib.h>")
-	call append(line(".")+8, "#include \"mpi.h\"")
-	call append(line(".")+9, "")
-endif
+endif	
 endfunc
 autocmd BufNewFile * normal G
 
